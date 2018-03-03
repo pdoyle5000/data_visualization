@@ -1,9 +1,12 @@
 library(tidyverse)
 library(plotly)
-
+library(RCurl)
 # Create Data
+rawCsv <- getURL("https://raw.githubusercontent.com/pdoyle5000/data_visualization/master/kingCountyData.csv")
+
+
 houseData <- read.csv(
-  "kingCountyData.csv", sep = ",")
+  text = rawCsv, sep = ",")
 houseData$priceGroup <- ifelse(houseData$price < 322001, 1,
                                ifelse(houseData$price < 645001, 2,
                                       ifelse(houseData$price < 1300001, 3, 4)))
