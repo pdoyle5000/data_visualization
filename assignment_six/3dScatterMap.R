@@ -1,5 +1,5 @@
-# install.packages('tidyverse')
-# install.packages('RCurl')
+install.packages('tidyverse')
+install.packages('RCurl')
 install.packages('maps')
 library(tidyverse)
 library(plotly)
@@ -54,22 +54,14 @@ plotlyMap <- plot_ly(houseData,
     text = ~paste(paste("Built:", yr_built), paste("Price:", price), sep = "<br />"),
     hoverinfo = 'text'
   ) %>%
-  layout(title = "King County Housing Prices By Year Built<br /><i>Higher group means higher price.</i>",
+  layout(title = "King County Housing Prices By Year Built<br /><i>Darker color means larger price.</i>",
          scene = list(xaxis = list(title = 'long'),
                       yaxis = list(title = 'lat'),
                       zaxis = list(title = 'year built',
                                    range = c(1900,2015))))
-  plotlyMap <- addT(plotlyMap, 1900)
-  plotlyMap <- addT(plotlyMap, 1923)
-  plotlyMap <- addT(plotlyMap, 1946)
-  plotlyMap <- addT(plotlyMap, 1969)
-  plotlyMap <- addT(plotlyMap, 1992)
-  plotlyMap <- addT(plotlyMap, 2015)
-
+  years <- c(1900, 1923, 1946, 1969, 1992, 2015)
+  for (year in years) {
+    plotlyMap <- addT(plotlyMap, year)
+  }
 
 plotlyMap
-
-# Sys.setenv("plotly_username"= "pdoyle")
-# Sys.setenv("plotly_api_key"="vGaIhwTcCvYNOOj02dm7")
-# chart_link = plotly_POST(plotlyMap, filename="kingcounty")
-# chart_link
