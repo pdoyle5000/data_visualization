@@ -7,13 +7,13 @@ import (
 	"io/ioutil"
 	"log"
 	"sort"
-	//"time"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
 )
 
+// Endpoints not accessable outside secure VPN
 const all_builds_url = "https://gradle.is.idexx.com/build-export/v1/builds/since/0"
 const detailsPt = "https://gradle.is.idexx.com/build-export/v1/build/"
 
@@ -59,26 +59,36 @@ type fullGradleBuildData struct {
 	Details  []singleBuild
 }
 
-// tm := time.Unix(stamp) will generate a date.
-// tm.String() after.
 type flatData struct {
 	BuildId       string `json:"buildId"`
 	GradleVersion string `json:"gradleVersion"`
 	PluginVersion string `json:"pluginVersion`
-	// Use these to build a graph of avg build times per project.
-	// Use the sheer number of builds over time. (first time to today.)
 	BuildStart int64  `json:"buildStart"`
 	BuildEnd   int64  `json:"buildEnd"`
 	Project    string `json:"project"`
-
-	// Load every PluginApplicationStarted event with pluginClassName
-	// remove duplicates after. sort.Strings(list)
-	// if we are sorted, a loop to check a val against the previous val
-	// will allow us to remove duplicates
-
-	// This will allow us to graph plugin usage over time.
 	PluginList []string `json:"plugins"`
 }
+
+type pluginList struct {
+	Timestamp int64 `json:"timestamp"`
+	Project string `json:"project"`
+	Plugin string `json:"plugin"`
+}
+
+func generatePluginList(f []flatData) {
+	var outputList []pluginList
+	for _, build := range f {
+		for _, plugin := range build.PluginList {
+			outputList = append(outputList, pluginList{
+				Timestamp: build.BuildStart,
+				Project: build.Project,
+				Plugin: plugin,
+				})
+		}
+	}
+	outputPluginList(outputList)
+}
+
 
 func generateCleanData(b []fullGradleBuildData) (f []flatData) {
 	for _, build := range b {
@@ -115,13 +125,11 @@ func (b *fullGradleBuildData) getRootProjectName() string {
 func (b *fullGradleBuildData) getUsedPlugins() []string {
 	var pList []string
 	for _, event := range b.Details {
-		//log.Println("Event Type:", event.Type.EventType)
 		if event.Type.EventType == "PluginApplicationStarted" ||
 			event.Type.EventType == "PluginApplied" {
 			pList = append(pList, event.Data.PluginClassName)
 		}
 	}
-	//log.Println("Plugins:", len(pList))
 	return removeDuplicates(pList)
 }
 
@@ -187,7 +195,7 @@ func LoadAllGradleData() (f []fullGradleBuildData) {
 	//numBuilds := 100
 	log.Println("Total Builds:", numBuilds)
 
-	maxThreads := 5
+	maxThreads := 100
 	for listLoc := 0; listLoc < numBuilds; listLoc += maxThreads {
 		log.Println("On Location:", listLoc)
 		threadsToStart := min(maxThreads, numBuilds-listLoc)
@@ -268,6 +276,20 @@ func outputToFlatFile(data []flatData) {
 	log.Println("Successful flat-file output")
 }
 
+func outputPluginList(data []pluginList) {
+	jsonStr, toStrErr := json.Marshal(data)
+	if toStrErr != nil {
+		log.Println(toStrErr)
+	}
+
+	outputErr := ioutil.WriteFile("plugins.json", jsonStr, 0644)
+
+	if outputErr != nil {
+		log.Println(outputErr)
+	}
+	log.Println("Successful plugin-file output")
+}
+
 func importGradleData() (f []fullGradleBuildData) {
 	raw, err := ioutil.ReadFile("gradle_full_output.json")
     if err != nil {
@@ -278,11 +300,12 @@ func importGradleData() (f []fullGradleBuildData) {
     return
 }
 
+
 func main() {
-	//d := LoadAllGradleData()
-	d := importGradleData()
+	d := LoadAllGradleData()
+	//d := importGradleData()
 	//outputToFile(d)
 	final := generateCleanData(d)
-	outputToFlatFile(final)
-	//outputToFile(d)
+	outputToFlatFile(d)
+	generatePluginList(final)
 }
