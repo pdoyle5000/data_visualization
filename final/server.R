@@ -1,15 +1,19 @@
 shinyServer(
   function(input, output) {
     output$perDayPlot <- renderPlotly({
-      generateBuildOverTimeChart(buildData)
+      generateBuildOverTimeChart(
+        uiFilter(buildData, input$timeSlider))
     })
     
     output$pluginPlot <- renderPlot({
-      generatePluginChart(pluginsListing)
+      generatePluginChart(
+        uiFilter(pluginsListing, input$timeSlider))
     })
 
     output$buildTimePlot <- renderPlotly({
-      generateBuildTimesChart(subset(buildData, duration < 60))
+      generateBuildTimesChart(
+        uiFilter(subset(buildData, duration < 60), input$timeSlider))
+      # Builds that take longer than an hour are errors.
     })
   }
 )

@@ -2,30 +2,37 @@ shinyUI(
   fluidPage(
     titlePanel("Idexx Embedded Development - Gradle Software Builds"),
     fluidRow(
-      column(9,
+      column(12,
+             wellPanel(
+               sliderInput(inputId = "timeSlider", 
+                           label = "Select Time Range:",
+                           min = min(buildData$day),
+                           max = max(buildData$day),
+                           value = c(min(buildData$day), 
+                                     max(buildData$day))),
+               style = "padding: 10px;"
+             )  
+      )
+    ),
+    fluidRow(
+      column(12,
              tabsetPanel(
                tabPanel(
                  HTML("<b>Plugin Usage Per Project</b>"),
-                 plotOutput("pluginPlot", height = 650),
-                 height = 7000, 
+                 plotOutput("pluginPlot", height = 680),
+                 height = 800, 
                  width = '98%'),
                tabPanel(
-                 "Build Totals Per Day",
-                 plotlyOutput("perDayPlot", height = 650),
-                 height = 700, 
+                 "Per Day Build Totals",
+                 plotlyOutput("perDayPlot", height = 680),
+                 height = 800, 
                  width = '98%'),
                tabPanel(
                  "Project Build Durations",
-                 plotlyOutput("buildTimePlot", height = 650),
-                 height = 700, 
+                 plotlyOutput("buildTimePlot", height = 680),
+                 height = 800, 
                  width = '98%')
                )
-             ),
-      column(3,
-             wellPanel(
-                sliderInput("obs", "Number of observations:",  
-                         min = 1, max = 1000, value = 500)
-           )  
-     )
+             )
   )
 ))

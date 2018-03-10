@@ -1,4 +1,3 @@
-
 # Custom theme for the charts to fit well with Dashboard/UI
 darkTheme <- function(titleHAdjust = 0) {
   t <- theme(plot.background = element_rect(fill = '#302d2d', 
@@ -56,7 +55,8 @@ generateBuildTimesChart <- function(builds) {
   p <- ggplot(builds, 
               aes(y = duration, 
                   x = project, 
-                  color = project)) + 
+                  color = project,
+                  text = sprintf("<b>Project:</b> %s<br /><b>Duration:</b> %f", project, duration))) + 
     geom_boxplot(alpha = .8, 
                  fill = "#302d2d", 
                  width = 0.85,
@@ -74,7 +74,7 @@ generateBuildTimesChart <- function(builds) {
          title = "Project Build Times",
          caption = "data from gradle.is.idexx.com")
   
-  return(ggplotly(p))
+  return(ggplotly(p, tooltip = "text"))
 }
 
 # This is a simple line chart displaying builds over time
@@ -101,10 +101,11 @@ generateBuildOverTimeChart <- function(builds) {
                  date_labels = "%b %d",
                  expand = c(0,0)) +
     scale_y_continuous(breaks = seq(0, max(aggData$freq), 10))
-  #return(p)
-  return(ggplotly(p, tooltip="text"))
+  return(ggplotly(p, tooltip = "text"))
 }
 
-#generateBuildOverTimeChart(buildData)
-#generatePluginChart(pluginsListing)
-#generateBuildTimesChart(subset(buildData, duration < 60))
+uiFilter <- function(rawData, uiInput) {
+  filteredData <- subset(rawData,
+                         rawData$day >= uiInput[1] & rawData$day <= uiInput[2])
+  return(filteredData)
+}

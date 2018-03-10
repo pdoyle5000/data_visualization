@@ -26,16 +26,15 @@ buildData$project <- factor(buildData$project)
 buildData$buildStart <- anytime(buildData$buildStart/1000)
 buildData$buildEnd <- anytime(buildData$buildEnd/1000)
 buildData$duration <- abs(as.numeric(buildData$buildEnd - buildData$buildStart, units = "mins"))
-buildData$day <- as.Date(trunc(buildData$buildStart, "days"), origin="1970-01-01")
+buildData$day <- as.Date(trunc(buildData$buildStart, "days"), origin = "1970-01-01")
 
 pluginsListing <- inputPlugins
 pluginsListing$Projects <- factor(inputPlugins$project)
 pluginsListing$plugin <- factor(inputPlugins$plugin)
-pluginsListing$timestamp <- anytime(inputPlugins$timestamp)
-
+pluginsListing$timestamp <- anytime(as.numeric(inputPlugins$timestamp)/1000)
+pluginsListing$day <- as.Date(trunc(pluginsListing$timestamp, "days"), origin = "1970-01-01")
 
 # TODO List
 
-# Build R Server App
 # Dockerize (if time, serve it up!)
 # Slides
