@@ -19,9 +19,21 @@ shinyUI(
              tabsetPanel(
                tabPanel(
                  HTML("<b>Plugin Usage Per Project</b>"),
-                 plotOutput("pluginPlot", height = 680),
+                 fluidRow(
+                   column(9,
+                          plotOutput("pluginPlot", height = 680)),
+                   column(3,
+                          wellPanel(
+                            sliderInput(inputId = "holder", 
+                                        label = "Select Time Range:",
+                                        min = min(buildData$day),
+                                        max = max(buildData$day),
+                                        value = c(min(buildData$day), 
+                                                  max(buildData$day))),
+                            style = "padding: 10px;"
+                          )),
                  height = 800, 
-                 width = '98%'),
+                 width = '98%')),
                tabPanel(
                  "Per Day Build Totals",
                  plotlyOutput("perDayPlot", height = 680),

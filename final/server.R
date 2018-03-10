@@ -6,8 +6,9 @@ shinyServer(
     })
     
     output$pluginPlot <- renderPlot({
+      filteredPlugins <- uiPluginFilter(pluginsListing, input$pluginTop, input$pluginBottom)
       generatePluginChart(
-        uiFilter(pluginsListing, input$timeSlider))
+        uiFilter(filteredPlugins, input$timeSlider))
     })
 
     output$buildTimePlot <- renderPlotly({
