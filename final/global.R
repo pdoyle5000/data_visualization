@@ -1,44 +1,41 @@
-install.packages('jsonlite')
-install.packages('anytime')
+#install.packages('jsonlite')
+#install.packages('anytime')
+#install.packages('ggplot2')
+#install.packages('plotly')
+#install.packages('shiny')
+library(shiny)
 library(jsonlite)
 library(anytime)
+library(ggplot2)
+library(forcats)
+library(tidyr)
+library(plyr)
+library(plotly)
+source('gradleCharts.R')
+
+# load data
+# these files will be staged by to GO app, (cadence TBD Cron)
 inputJson <- jsonlite::fromJSON("flat_all2.json")
 inputPlugins <- jsonlite::fromJSON("plugins.json")
 
-# TODO List
-# Clean go script
-# Write Word Doc
-# Build R Server App
-# Dockerize (if time, serve it up!)
-# Slides
-
-buildData <- inputJson
+# Format data
+buildData <-inputJson
 buildData$gradleVersion <- factor(buildData$gradleVersion)
 buildData$pluginVersion <- factor(buildData$pluginVersion)
 buildData$project <- factor(buildData$project)
 buildData$buildStart <- anytime(buildData$buildStart/1000)
 buildData$buildEnd <- anytime(buildData$buildEnd/1000)
-buildData$duration <- as.numeric(buildData$buildEnd - buildData$buildStart, units = "secs")
+buildData$duration <- abs(as.numeric(buildData$buildEnd - buildData$buildStart, units = "mins"))
+buildData$day <- as.Date(trunc(buildData$buildStart, "days"), origin="1970-01-01")
 
 pluginsListing <- inputPlugins
-pluginsListing$project <- factor(inputPlugins$project)
+pluginsListing$Projects <- factor(inputPlugins$project)
 pluginsListing$plugin <- factor(inputPlugins$plugin)
+pluginsListing$timestamp <- anytime(inputPlugins$timestamp)
 
-summary(pluginsListing$plugin)
-# test breaking down plugins list
-mergeLists <- function(pluginLists) {
-  
-  #allPlugins <- do.call(c, unlist(pluginLists, recursive=FALSE))
-}
 
-options(scipen=999)
-print(test2$buildStart[1])
-anytime(test2$buildStart[1])
+# TODO List
 
-anytime(1519848561681 / 1000)
-anytime(1519848561)
-
-library(tidyr)
-t#nest <- unnest(buildData$plugins, plugins)
-biglist <- mergeLists(buildData$plugins)
-#print(testInputJson$plugins[2])
+# Build R Server App
+# Dockerize (if time, serve it up!)
+# Slides

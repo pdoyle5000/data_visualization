@@ -56,8 +56,8 @@ plotlyMap <- plot_ly(houseData,
   ) %>%
   layout(title = "King County Housing Prices By Year Built<br /><i>Darker color means larger price.</i>",
          scene = list(xaxis = list(title = 'long'),
-                      yaxis = list(title = 'lat'),
-                      zaxis = list(title = 'year built',
+                      yaxis = list(title = 'lat', autorange = "reversed"),
+                      zaxis = list(title = 'year built', autorange = "reversed",
                                    range = c(1900,2015))))
   years <- c(1900, 1923, 1946, 1969, 1992, 2015)
   for (year in years) {
