@@ -13,6 +13,7 @@ library(tidyr)
 library(plyr)
 library(plotly)
 library(shinythemes)
+source('gradleCharts.R')
 
 # load data
 # these files will be staged by to GO app, (cadence TBD Cron)
@@ -34,8 +35,3 @@ pluginsListing$Projects <- factor(inputPlugins$project)
 pluginsListing$plugin <- factor(inputPlugins$plugin)
 pluginsListing$timestamp <- anytime(as.numeric(inputPlugins$timestamp)/1000)
 pluginsListing$day <- as.Date(trunc(pluginsListing$timestamp, "days"), origin = "1970-01-01")
-
-# TODO List
-
-# Dockerize (if time, serve it up!)
-# Slides

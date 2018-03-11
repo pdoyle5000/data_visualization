@@ -1,5 +1,3 @@
-source('gradleCharts.R')
-
 shinyServer(
   function(input, output) {
     output$perDayPlot <- renderPlotly({

@@ -44,7 +44,7 @@ generatePluginChart <- function(pluginData) {
          y = "Usage Count",
          title = "Plugin Usage Across Projects",
          caption = "data from gradle.is.idexx.com") +
-    darkTheme(-4.45) +
+    darkTheme(2.2) +
     scale_y_continuous(breaks=seq(0, 65, 5),
                        expand=c(0,0)) # probably eliminating this when interactive.
   return(p)
