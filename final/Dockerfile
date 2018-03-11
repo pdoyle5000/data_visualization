@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y -t unstable \
 EXPOSE 3838
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
-COPY flat_all2.json /srv/shiny-server/
-COPY plugins.json /srv/shiny-server/
+COPY build_data.json /srv/shiny-server/
+COPY plugin_data.json /srv/shiny-server/
 COPY ui.R /srv/shiny-server/
 COPY global.R /srv/shiny-server/
 COPY server.R /srv/shiny-server/
