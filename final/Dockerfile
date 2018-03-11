@@ -11,9 +11,10 @@ RUN apt-get update && apt-get install -y -t unstable \
     wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
     VERSION=$(cat version.txt)  && \
     wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
+    apt-get update && apt-get install -y libssl-dev && \
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb && \
-    R -e "install.packages(c('shiny', 'rmarkdown', 'devtools', 'RCurl', 'openssl', 'httr', 'forcats', 'ggplot2', 'jsonlite', 'anytime', 'plotly', 'shinythemes'), repos='https://cran.rstudio.com/')" && \
+    R -e "install.packages(c('shiny', 'rmarkdown', 'forcats', 'ggplot2', 'jsonlite', 'anytime', 'plotly', 'shinythemes'), repos='https://cran.rstudio.com/')" && \
     cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/ && \
     rm -rf /var/lib/apt/lists/*
 

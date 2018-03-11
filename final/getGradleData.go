@@ -268,7 +268,7 @@ func outputToFlatFile(data []flatData) {
 		log.Println(toStrErr)
 	}
 
-	outputErr := ioutil.WriteFile("flat_all.json", jsonStr, 0644)
+	outputErr := ioutil.WriteFile("builds_week.json", jsonStr, 0644)
 
 	if outputErr != nil {
 		log.Println(outputErr)
@@ -282,7 +282,7 @@ func outputPluginList(data []pluginList) {
 		log.Println(toStrErr)
 	}
 
-	outputErr := ioutil.WriteFile("plugins.json", jsonStr, 0644)
+	outputErr := ioutil.WriteFile("plugins_week.json", jsonStr, 0644)
 
 	if outputErr != nil {
 		log.Println(outputErr)
@@ -306,6 +306,6 @@ func main() {
 	//d := importGradleData()
 	//outputToFile(d)
 	final := generateCleanData(d)
-	outputToFlatFile(d)
+	outputToFlatFile(final)
 	generatePluginList(final)
 }
