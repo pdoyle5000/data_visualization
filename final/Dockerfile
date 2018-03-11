@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y -t unstable \
     gdebi-core \
     pandoc \
     pandoc-citeproc \
+    libssl-dev \
+    libcurl4-openssl-dev \
     libcurl4-gnutls-dev \
     libcairo2-dev/unstable \
     libxt-dev && \
