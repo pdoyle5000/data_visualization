@@ -16,10 +16,9 @@ shinyServer(
 
     output$buildTimePlot <- renderPlotly({
       withProgress(message = 'Generating Build Time Plot', value = 0, {
-        generateBuildTimesChart(
+        generateBuildTimesChart( # Builds that take longer than an hour are errors.
           uiFilter(subset(buildData, duration < 60), input$timeSlider))
       })
-      # Builds that take longer than an hour are errors.
     })
     
     output$perDayText <- renderText({

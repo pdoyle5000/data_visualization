@@ -10,8 +10,7 @@ shinyUI(
                            max = max(buildData$day),
                            value = c(min(buildData$day), 
                                      max(buildData$day))),
-               style = "padding: 10px;"
-             )  
+               style = "padding: 10px;")  
       )
     ),
     fluidRow(
@@ -39,12 +38,12 @@ shinyUI(
                  HTML("<b>Plugin Usage Per Project</b>"),
                  fluidRow(
                    column(10,
-                          plotOutput("pluginPlot", height = 680)),
+                          plotOutput("pluginPlot", height = 750)),
                    column(2,
                           textOutput("pluginText")),
                    height = 800,
                    width = '98%'))
                )
-             )
+        )
   )
 ))

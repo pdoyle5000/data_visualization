@@ -29,7 +29,6 @@ darkTheme <- function(titleHAdjust = 0) {
 }
 
 # This Viz will display a bar for each plugin and be split on project.
-# Interactives: time, topx, bottomx.
 generatePluginChart <- function(pluginData) {
   p <- ggplot(pluginData[order(pluginData$Projects, decreasing = T),],
               aes(x = fct_rev(fct_infreq(plugin)), 
@@ -44,9 +43,8 @@ generatePluginChart <- function(pluginData) {
          y = "Usage Count",
          title = "Plugin Usage Across Projects",
          caption = "data from gradle.is.idexx.com") +
-    darkTheme(2.2) +
-    scale_y_continuous(breaks=seq(0, 65, 5),
-                       expand=c(0,0)) # probably eliminating this when interactive.
+    darkTheme(0.5) +
+    scale_y_continuous(expand=c(0,0))
   return(p)
 }
 
@@ -111,13 +109,16 @@ uiFilter <- function(rawData, uiInput) {
 }
 
 perDayTextOutput <- function(timeInput) {
-  return(sprintf("This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))
+  return(sprintf(
+    "This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))
 }
 
 buildTimesTextOutput <- function(timeInput) {
-  return(sprintf("This is a chart displaying project build time data from: %s to %s", timeInput[1], timeInput[2]))
+  return(sprintf(
+    "This is a chart displaying project build time data from: %s to %s", timeInput[1], timeInput[2]))
 }
 
 pluginUsageTextOutput <- function(timeInput) {
-  return(sprintf("This is a chart displaying project plugin usage data from: %s to %s", timeInput[1], timeInput[2]))
+  return(sprintf(
+    "This is a chart displaying project plugin usage data from: %s to %s", timeInput[1], timeInput[2]))
 }
