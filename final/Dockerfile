@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y -t unstable \
     wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb && \
-    R -e "install.packages(c('shiny', 'rmarkdown', 'ggplot2'), repos='https://cran.rstudio.com/')" && \
+    R -e "install.packages(c('shiny', 'rmarkdown', 'ggplot2', 'jsonlite', 'anytime', 'plotly', 'shinythemes'), repos='https://cran.rstudio.com/')" && \
     cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/ && \
     rm -rf /var/lib/apt/lists/*
 
@@ -25,6 +25,6 @@ COPY plugins.json /srv/shiny-server/
 COPY ui.R /srv/shiny-server/
 COPY global.R /srv/shiny-server/
 COPY server.R /srv/shiny-server/
-COPY gradleCharts.R.R /srv/shiny-server/
+COPY gradleCharts.R /srv/shiny-server/
 
 CMD ["/usr/bin/shiny-server.sh"]
