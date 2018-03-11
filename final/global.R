@@ -3,6 +3,7 @@
 #install.packages('ggplot2')
 #install.packages('plotly')
 #install.packages('shiny')
+#install.packages("shinythemes")
 library(shiny)
 library(jsonlite)
 library(anytime)
@@ -11,7 +12,7 @@ library(forcats)
 library(tidyr)
 library(plyr)
 library(plotly)
-source('gradleCharts.R')
+library(shinythemes)
 
 # load data
 # these files will be staged by to GO app, (cadence TBD Cron)

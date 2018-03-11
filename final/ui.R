@@ -1,5 +1,5 @@
 shinyUI(
-  fluidPage(
+  fluidPage(theme = shinytheme("darkly"),
     titlePanel("Idexx Embedded Development - Gradle Software Builds"),
     fluidRow(
       column(12,
@@ -18,32 +18,32 @@ shinyUI(
       column(12,
              tabsetPanel(
                tabPanel(
-                 HTML("<b>Plugin Usage Per Project</b>"),
+                 HTML("<b>Daily Builds By Project</b>"),
                  fluidRow(
-                   column(9,
-                          plotOutput("pluginPlot", height = 680)),
-                   column(3,
-                          wellPanel(
-                            sliderInput(inputId = "holder", 
-                                        label = "Select Time Range:",
-                                        min = min(buildData$day),
-                                        max = max(buildData$day),
-                                        value = c(min(buildData$day), 
-                                                  max(buildData$day))),
-                            style = "padding: 10px;"
-                          )),
-                 height = 800, 
+                   column(10,
+                          plotlyOutput("perDayPlot", height = 680)),
+                   column(2,
+                          textOutput("perDayText")),
+                 height = 800,
                  width = '98%')),
                tabPanel(
-                 "Per Day Build Totals",
-                 plotlyOutput("perDayPlot", height = 680),
-                 height = 800, 
-                 width = '98%'),
+                 HTML("<b>Build Durations By Project</b>"),
+                 fluidRow(
+                   column(10,
+                          plotlyOutput("buildTimePlot", height = 680)),
+                   column(2,
+                          textOutput("buildText")),
+                 height = 800,
+                 width = '98%')),
                tabPanel(
-                 "Project Build Durations",
-                 plotlyOutput("buildTimePlot", height = 680),
-                 height = 800, 
-                 width = '98%')
+                 HTML("<b>Plugin Usage Per Project</b>"),
+                 fluidRow(
+                   column(10,
+                          plotOutput("pluginPlot", height = 680)),
+                   column(2,
+                          textOutput("pluginText")),
+                   height = 800,
+                   width = '98%'))
                )
              )
   )

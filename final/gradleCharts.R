@@ -109,3 +109,15 @@ uiFilter <- function(rawData, uiInput) {
                          rawData$day >= uiInput[1] & rawData$day <= uiInput[2])
   return(filteredData)
 }
+
+perDayTextOutput <- function(timeInput) {
+  return(sprintf("This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))
+}
+
+buildTimesTextOutput <- function(timeInput) {
+  return(sprintf("This is a chart displaying project build time data from: %s to %s", timeInput[1], timeInput[2]))
+}
+
+pluginUsageTextOutput <- function(timeInput) {
+  return(sprintf("This is a chart displaying project plugin usage data from: %s to %s", timeInput[1], timeInput[2]))
+}
