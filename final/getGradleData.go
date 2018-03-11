@@ -192,11 +192,10 @@ func LoadAllGradleData() (f []fullGradleBuildData) {
 	log.Println("Obtaining High Level Gradle Build Info.")
 	allBuilds := getAllBuilds()
 	numBuilds := len(allBuilds)
-	//numBuilds := 100
 	log.Println("Total Builds:", numBuilds)
 
-	maxThreads := 100
-	for listLoc := 0; listLoc < numBuilds; listLoc += maxThreads {
+	maxThreads := 10
+	for listLoc := 54000; listLoc < numBuilds; listLoc += maxThreads {
 		log.Println("On Location:", listLoc)
 		threadsToStart := min(maxThreads, numBuilds-listLoc)
 		var wg sync.WaitGroup
@@ -268,7 +267,7 @@ func outputToFlatFile(data []flatData) {
 		log.Println(toStrErr)
 	}
 
-	outputErr := ioutil.WriteFile("builds_week.json", jsonStr, 0644)
+	outputErr := ioutil.WriteFile("build_data.json", jsonStr, 0644)
 
 	if outputErr != nil {
 		log.Println(outputErr)
@@ -282,7 +281,7 @@ func outputPluginList(data []pluginList) {
 		log.Println(toStrErr)
 	}
 
-	outputErr := ioutil.WriteFile("plugins_week.json", jsonStr, 0644)
+	outputErr := ioutil.WriteFile("plugin_data.json", jsonStr, 0644)
 
 	if outputErr != nil {
 		log.Println(outputErr)
@@ -303,8 +302,8 @@ func importGradleData() (f []fullGradleBuildData) {
 
 func main() {
 	d := LoadAllGradleData()
-	//d := importGradleData()
-	//outputToFile(d)
+	//d := importGradleData() // For importing pre-loaded query
+	//outputToFile(d) // for saving a pre-loaded query
 	final := generateCleanData(d)
 	outputToFlatFile(final)
 	generatePluginList(final)

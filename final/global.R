@@ -1,9 +1,12 @@
+# These dependencies are needed outside of the Container.
+
 #install.packages('jsonlite')
 #install.packages('anytime')
 #install.packages('ggplot2')
 #install.packages('plotly')
 #install.packages('shiny')
 #install.packages("shinythemes")
+
 library(shiny)
 library(jsonlite)
 library(anytime)
@@ -17,13 +20,12 @@ source('gradleCharts.R')
 
 # load data
 # these files will be staged by to GO app, (cadence TBD Cron)
-inputJson <- jsonlite::fromJSON("flat_all2.json")
-inputPlugins <- jsonlite::fromJSON("plugins.json")
+inputJson <- jsonlite::fromJSON("build_data.json")
+inputPlugins <- jsonlite::fromJSON("plugin_data.json")
 
 # Format data
 buildData <-inputJson
 buildData$gradleVersion <- factor(buildData$gradleVersion)
-buildData$pluginVersion <- factor(buildData$pluginVersion)
 buildData$project <- factor(buildData$project)
 buildData$buildStart <- anytime(buildData$buildStart/1000)
 buildData$buildEnd <- anytime(buildData$buildEnd/1000)
