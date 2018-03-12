@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y -t unstable \
     apt-get update && apt-get install -y libssl-dev && \
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb && \
+    mkdir /srv/shiny-server/data && \
     R -e "install.packages(c('shiny', 'rmarkdown', 'forcats', 'ggplot2', 'jsonlite', 'anytime', 'plotly', 'shinythemes'), repos='https://cran.rstudio.com/')" && \
     cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/ && \
     rm -rf /var/lib/apt/lists/*
@@ -21,8 +22,8 @@ RUN apt-get update && apt-get install -y -t unstable \
 EXPOSE 3838
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
-COPY build_data.json /srv/shiny-server/
-COPY plugin_data.json /srv/shiny-server/
+COPY data/build_data.json /srv/shiny-server/data/
+COPY data/plugin_data.json /srv/shiny-server/data/
 COPY ui.R /srv/shiny-server/
 COPY global.R /srv/shiny-server/
 COPY server.R /srv/shiny-server/
