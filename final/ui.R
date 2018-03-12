@@ -40,6 +40,12 @@ shinyUI(
                    column(10,
                           plotOutput("pluginPlot", height = 750)),
                    column(2,
+                          selectInput(inputId = "pluginGroup",
+                                      label = "Plugin Company",
+                                      choices = c("All" = "",
+                                                  "Idexx" = "com.idexx",
+                                                  "Gradle" = "org.gradle",
+                                                  "Other" = "other")),
                           textOutput("pluginText")),
                    height = 800,
                    width = '98%'))

@@ -108,6 +108,16 @@ uiFilter <- function(rawData, uiInput) {
   return(filteredData)
 }
 
+pluginFilter <- function(pluginData, pluginPrefix = "ALL") {
+  if (pluginPrefix == "org.gradle" | pluginPrefix == "com.idexx") {
+    return(subset(pluginData, grepl(pluginPrefix, plugin)))
+  }
+  if (pluginPrefix == "other") {
+    return(subset(pluginData, !grepl("org.gradle|com.idexx", plugin)))
+  }
+  return(pluginData)
+}
+
 perDayTextOutput <- function(timeInput) {
   return(sprintf(
     "This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))

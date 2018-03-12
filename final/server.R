@@ -8,9 +8,10 @@ shinyServer(
     })
     
     output$pluginPlot <- renderPlot({
+      groupFilteredPlugins <- pluginFilter(pluginsListing, input$pluginGroup)
       withProgress(message = 'Generating Plugin Usage Plot', value = 0, {
         generatePluginChart(
-          uiFilter(pluginsListing, input$timeSlider))
+          uiFilter(groupFilteredPlugins, input$timeSlider))
       })
     })
 
