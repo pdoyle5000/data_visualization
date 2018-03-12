@@ -35,7 +35,7 @@ shinyUI(
                  height = 800,
                  width = '98%')),
                tabPanel(
-                 HTML("<b>Plugin Usage Per Project</b>"),
+                 HTML("<b>Plugin Usage Across Projects</b>"),
                  fluidRow(
                    column(10,
                           plotOutput("pluginPlot", height = 750)),
