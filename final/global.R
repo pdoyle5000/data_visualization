@@ -20,8 +20,8 @@ source('gradleCharts.R')
 
 # load data
 # these files will be staged by to GO app, (cadence TBD Cron)
-inputJson <- jsonlite::fromJSON("build_data.json")
-inputPlugins <- jsonlite::fromJSON("plugin_data.json")
+inputJson <- jsonlite::fromJSON("data/build_data.json")
+inputPlugins <- jsonlite::fromJSON("data/plugin_data.json")
 
 # Format data
 buildData <-inputJson
