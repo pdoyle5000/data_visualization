@@ -37,3 +37,8 @@ pluginsListing$Projects <- factor(inputPlugins$project)
 pluginsListing$plugin <- factor(inputPlugins$plugin)
 pluginsListing$timestamp <- anytime(as.numeric(inputPlugins$timestamp)/1000)
 pluginsListing$day <- as.Date(trunc(pluginsListing$timestamp, "days"), origin = "1970-01-01")
+
+# TODO:
+# Add points to daily builds
+# Add color scheme
+# make plugin text more readable.

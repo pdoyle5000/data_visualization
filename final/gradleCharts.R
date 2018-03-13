@@ -61,7 +61,7 @@ generateBuildTimesChart <- function(builds) {
                  outlier.alpha = 1,
                  outlier.shape = 2) + 
     geom_jitter(width = 0.1,
-                alpha = .1) +
+                alpha = .3) +
     scale_y_continuous(breaks=seq(0, 10, 1),
                        expand=c(0,0)) +
     coord_flip() +
@@ -88,7 +88,7 @@ generateBuildOverTimeChart <- function(builds) {
               text = sprintf("<b>Project:</b> %s<br /><b>Builds:</b> %i", project, freq)),
           geom = "line",
           stat = "identity",
-          position = "identity") + 
+          position = "identity") +
     darkTheme(0) +
     labs(y = "Number of Builds",
          x = "Day",
