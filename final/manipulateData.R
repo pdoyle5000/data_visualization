@@ -17,9 +17,9 @@ pluginFilter <- function(pluginData, pluginPrefix = "ALL") {
 }
 
 # Remove low frequency data from plottable set
-trimLowFrequencies <- function(data, fieldToCount) {
+trimLowFrequencies <- function(data, fieldToCount, cutoffNum) {
   countedBuildData <- count(data[[fieldToCount]])
-  shavedCountedBuildData <- subset(countedBuildData, freq > 9)
+  shavedCountedBuildData <- subset(countedBuildData, freq >= cutoffNum)
   listOfQualifiedProjects <- shavedCountedBuildData$x
   return(subset(data, data[[fieldToCount]] %in% listOfQualifiedProjects))
 }

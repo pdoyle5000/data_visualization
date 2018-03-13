@@ -16,8 +16,9 @@ generatePluginChart <- function(pluginData) {
          title = "Plugin Usage Across Projects",
          caption = "data from gradle.is.idexx.com") +
     darkTheme(0.5, 'black') +
-    theme(plot.background = element_rect(fill = 'white'),
-          axis.text.y = element_text(size = 11)) +
+    theme(plot.background = element_rect(fill = '#c6c6c6'),
+          axis.text.y = element_text(size = 11),
+          legend.key = element_blank()) +
     scale_y_continuous(expand=c(0,0)) +
     scale_fill_manual(values = customPlotColors) +
     scale_color_manual(values = customPlotColors)
