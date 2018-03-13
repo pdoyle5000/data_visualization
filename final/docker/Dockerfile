@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y -t unstable \
 EXPOSE 3838
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
+RUN chmod 777 /usr/bin/shiny-server.sh
 COPY data/build_data.json /srv/shiny-server/data
 COPY data/plugin_data.json /srv/shiny-server/data
 COPY ui.R /srv/shiny-server/
