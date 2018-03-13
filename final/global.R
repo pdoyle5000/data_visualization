@@ -17,6 +17,7 @@ library(plyr)
 library(plotly)
 library(shinythemes)
 source('gradleCharts.R')
+source('manipulateData.R')
 
 # load data
 # these files will be staged by to GO app, (cadence TBD Cron)
@@ -39,7 +40,3 @@ pluginsListing$timestamp <- anytime(as.numeric(inputPlugins$timestamp)/1000)
 pluginsListing$day <- as.Date(trunc(pluginsListing$timestamp, "days"), origin = "1970-01-01")
 
 pluginCount <- maxPluginCount(pluginsListing)
-# TODO:
-# Add points to daily builds
-# Add color scheme
-# make plugin text more readable.

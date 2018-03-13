@@ -1,32 +1,4 @@
-# Custom theme for the charts to fit well with Dashboard/UI
-darkTheme <- function(titleHAdjust = 0) {
-  t <- theme(plot.background = element_rect(fill = '#302d2d', 
-                                           color = '#8e8d8d'),
-            panel.background = element_rect( fill = '#3d3a3a',
-                                             color = '#777777'),
-            panel.grid.major = element_line(color = '#660b0b'),
-            panel.grid.minor = element_blank(),
-            panel.border = element_rect(color = 'white',
-                                        fill = NA,
-                                        size = 1.5),
-            axis.text.x = element_text(color = 'white'),
-            axis.text.y = element_text(color = 'white'),
-            axis.title.x = element_text(color = 'white', 
-                                        face = 'bold'),
-            axis.title.y = element_text(color = 'white', 
-                                        face = 'bold'),
-            plot.caption = element_text(color = 'white',
-                                        size = 10,
-                                        face = 'italic'),
-            plot.title = element_text(color = 'white', 
-                                     face = 'bold',
-                                     size = 16,
-                                     hjust = titleHAdjust),
-            legend.title = element_text(color = 'white'),
-            legend.text = element_text(color = 'white'),
-            legend.background = element_rect(fill = '#302d2d'))
-  return(t)
-}
+source('manipulateData.R')
 
 # This Viz will display a bar for each plugin and be split on project.
 generatePluginChart <- function(pluginData) {
@@ -43,8 +15,12 @@ generatePluginChart <- function(pluginData) {
          y = "Build Import Count",
          title = "Plugin Usage Across Projects",
          caption = "data from gradle.is.idexx.com") +
-    darkTheme(0.5) +
-    scale_y_continuous(expand=c(0,0))
+    darkTheme(0.5, 'black') +
+    theme(plot.background = element_rect(fill = 'white'),
+          axis.text.y = element_text(size = 11)) +
+    scale_y_continuous(expand=c(0,0)) +
+    scale_fill_manual(values = customPlotColors) +
+    scale_color_manual(values = customPlotColors)
   return(p)
 }
 
@@ -70,7 +46,8 @@ generateBuildTimesChart <- function(builds) {
     labs(y = "Build Time (minutes)",
          x = "Project",
          title = "Project Build Times",
-         caption = "data from gradle.is.idexx.com")
+         caption = "data from gradle.is.idexx.com") +
+    scale_color_manual(values = customPlotColors)
   
   return(ggplotly(p, tooltip = "text"))
 }
@@ -89,6 +66,15 @@ generateBuildOverTimeChart <- function(builds) {
           geom = "line",
           stat = "identity",
           position = "identity") +
+    layer(data = aggData,
+          aes(x = day, 
+              y = freq, 
+              group = project, 
+              color = project,
+              text = sprintf("<b>Project:</b> %s<br /><b>Builds:</b> %i", project, freq)),
+          geom = "point",
+          stat = "identity",
+          position = "identity") +
     darkTheme(0) +
     labs(y = "Number of Builds",
          x = "Day",
@@ -98,60 +84,61 @@ generateBuildOverTimeChart <- function(builds) {
     scale_x_date(date_breaks = "1 days",
                  date_labels = "%b %d",
                  expand = c(0,0)) +
-    scale_y_continuous(breaks = seq(0, max(aggData$freq), 10))
+    scale_y_continuous(breaks = seq(0, max(aggData$freq), 10)) +
+    scale_color_manual(values = customPlotColors)
   return(ggplotly(p, tooltip = "text"))
 }
 
-uiFilter <- function(rawData, uiInput) {
-  filteredData <- subset(rawData,
-                         rawData$day >= uiInput[1] & rawData$day <= uiInput[2])
-  return(filteredData)
+# Custom theme for the charts to fit well with Dashboard/UI
+darkTheme <- function(titleHAdjust = 0, defaultText = 'white') {
+  t <- theme(plot.background = element_rect(fill = '#302d2d', 
+                                            color = '#8e8d8d'),
+             panel.background = element_rect( fill = '#3d3a3a',
+                                              color = '#777777'),
+             panel.grid.major = element_line(color = '#660b0b'),
+             panel.grid.minor = element_blank(),
+             panel.border = element_rect(color = defaultText,
+                                         fill = NA,
+                                         size = 1.5),
+             axis.text.x = element_text(color = defaultText),
+             axis.text.y = element_text(color = defaultText),
+             axis.title.x = element_text(color = defaultText, 
+                                         face = 'bold'),
+             axis.title.y = element_text(color = defaultText, 
+                                         face = 'bold'),
+             plot.caption = element_text(color = defaultText,
+                                         size = 10,
+                                         face = 'italic'),
+             plot.title = element_text(color = defaultText, 
+                                       face = 'bold',
+                                       size = 16,
+                                       hjust = titleHAdjust),
+             legend.title = element_text(color = 'white'),
+             legend.text = element_text(color = 'white'),
+             legend.background = element_rect(fill = '#302d2d'))
+  return(t)
 }
 
-pluginFilter <- function(pluginData, pluginPrefix = "ALL") {
-  if (pluginPrefix == "org.gradle" | pluginPrefix == "com.idexx") {
-    return(subset(pluginData, grepl(pluginPrefix, plugin)))
-  }
-  if (pluginPrefix == "other") {
-    return(subset(pluginData, !grepl("org.gradle|com.idexx", plugin)))
-  }
-  return(pluginData)
-}
-
-trimLowFreqencies <- function(data, fieldToCount) {
-  countedBuildData <- count(data[[fieldToCount]])
-  shavedCountedBuildData <- subset(countedBuildData, freq > 9)
-  listOfQualifiedProjects <- shavedCountedBuildData$x
-  return(subset(data, data[[fieldToCount]] %in% listOfQualifiedProjects))
-}
-
-trimHighFreqencies <- function(data, fieldToCount, trimThreshold) {
-  countedBuildData <- count(data[[fieldToCount]])
-  shavedCountedBuildData <- subset(countedBuildData, freq <= trimThreshold)
-  listOfQualifiedProjects <- shavedCountedBuildData$x
-  return(subset(data, data[[fieldToCount]] %in% listOfQualifiedProjects))
-}
-
-maxPluginCount <- function(data) {
-  countedData <- count(data$plugin)
-  return(max(countedData$freq))
-  
-}
-
-perDayTextOutput <- function(timeInput) {
-  return(sprintf(
-    "This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))
-}
-
-buildTimesTextOutput <- function(timeInput) {
-  return(sprintf(
-    "This is a chart displaying project build time data from: %s to %s", timeInput[1], timeInput[2]))
-}
-
-pluginUsageTextOutput <- function(timeInput) {
-  return(sprintf(
-    "This is a chart displaying project plugin usage data from: %s to %s", timeInput[1], timeInput[2]))
-}
-
-
-
+customPlotColors <- c(
+  '#26ff16',
+  '#fbff16',
+  '#ffa116',
+  '#ff1616',
+  '#16ff77',
+  '#16ffe3',
+  '#16c4ff',
+  '#1654ff',
+  '#6f16ff',
+  '#d416ff',
+  '#ff16ad',
+  '#ff1654',
+  '#e6ffc1',
+  '#ffeec1',
+  '#c1ffee',
+  '#c1d5ff',
+  '#f3c1ff',
+  '#ffc1e2',
+  '#ffc1c1',
+  '#dbdbdb',
+  '#fffcfc'
+)

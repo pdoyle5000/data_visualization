@@ -42,7 +42,7 @@ shinyUI(
                    column(2,
                           selectInput(inputId = "pluginGroup",
                                       label = "Plugin Company",
-                                      choices = c("All" = "",
+                                      choices = c(
                                                   "Idexx" = "com.idexx",
                                                   "Gradle" = "org.gradle",
                                                   "Other" = "other")),
