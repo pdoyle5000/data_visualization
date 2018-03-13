@@ -1,14 +1,16 @@
 shinyServer(
   function(input, output) {
     output$perDayPlot <- renderPlotly({
+      cleanBuildData <- trimLowFreqencies(buildData, "project")
       withProgress(message = 'Generating Build Count Plot', value = 0, {
         generateBuildOverTimeChart(
-          uiFilter(buildData, input$timeSlider))
+          uiFilter(cleanBuildData, input$timeSlider))
       })
     })
     
     output$pluginPlot <- renderPlot({
-      groupFilteredPlugins <- pluginFilter(pluginsListing, input$pluginGroup)
+      cleanPluginsListing <- trimLowFreqencies(pluginsListing, "Projects")
+      groupFilteredPlugins <- pluginFilter(cleanPluginsListing, input$pluginGroup)
       withProgress(message = 'Generating Plugin Usage Plot', value = 0, {
         generatePluginChart(
           uiFilter(groupFilteredPlugins, input$timeSlider))
@@ -18,7 +20,7 @@ shinyServer(
     output$buildTimePlot <- renderPlotly({
       withProgress(message = 'Generating Build Time Plot', value = 0, {
         generateBuildTimesChart( # Builds that take longer than an hour are errors.
-          uiFilter(subset(buildData, duration < 60), input$timeSlider))
+          uiFilter(subset(buildData, duration < 10), input$timeSlider))
       })
     })
     

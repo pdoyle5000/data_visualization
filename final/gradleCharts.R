@@ -40,7 +40,7 @@ generatePluginChart <- function(pluginData) {
     coord_flip() + 
     scale_fill_hue(l=50) +
     labs(x = "Gradle Plugin",
-         y = "Usage Count",
+         y = "Build Import Count",
          title = "Plugin Usage Across Projects",
          caption = "data from gradle.is.idexx.com") +
     darkTheme(0.5) +
@@ -62,7 +62,7 @@ generateBuildTimesChart <- function(builds) {
                  outlier.shape = 2) + 
     geom_jitter(width = 0.1,
                 alpha = .1) +
-    scale_y_continuous(breaks=seq(0, 60, 5),
+    scale_y_continuous(breaks=seq(0, 10, 1),
                        expand=c(0,0)) +
     coord_flip() +
     darkTheme(0.5) +
@@ -118,6 +118,13 @@ pluginFilter <- function(pluginData, pluginPrefix = "ALL") {
   return(pluginData)
 }
 
+trimLowFreqencies <- function(data, fieldToCount) {
+  countedBuildData <- count(data[[fieldToCount]])
+  shavedCountedBuildData <- subset(countedBuildData, freq > 9)
+  listOfQualifiedProjects <- shavedCountedBuildData$x
+  return(subset(data, data[[fieldToCount]] %in% listOfQualifiedProjects))
+}
+
 perDayTextOutput <- function(timeInput) {
   return(sprintf(
     "This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))
@@ -132,3 +139,6 @@ pluginUsageTextOutput <- function(timeInput) {
   return(sprintf(
     "This is a chart displaying project plugin usage data from: %s to %s", timeInput[1], timeInput[2]))
 }
+
+
+
