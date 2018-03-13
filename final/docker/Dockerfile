@@ -22,11 +22,12 @@ RUN apt-get update && apt-get install -y -t unstable \
 EXPOSE 3838
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
-COPY build_data.json /srv/shiny-server/
-COPY plugin_data.json /srv/shiny-server/
-COPY ui.R /srv/shiny-server/
-COPY global.R /srv/shiny-server/
-COPY server.R /srv/shiny-server/
-COPY gradleCharts.R /srv/shiny-server/
+COPY ../data/build_data.json /srv/shiny-server/data
+COPY ../data/plugin_data.json /srv/shiny-server/data
+COPY ../ui.R /srv/shiny-server/
+COPY ../global.R /srv/shiny-server/
+COPY ../server.R /srv/shiny-server/
+COPY ../gradleCharts.R /srv/shiny-server/
+COPY ../manipulateData.R /srv/shiny-server/
 
 CMD ["/usr/bin/shiny-server.sh"]
