@@ -125,6 +125,19 @@ trimLowFreqencies <- function(data, fieldToCount) {
   return(subset(data, data[[fieldToCount]] %in% listOfQualifiedProjects))
 }
 
+trimHighFreqencies <- function(data, fieldToCount, trimThreshold) {
+  countedBuildData <- count(data[[fieldToCount]])
+  shavedCountedBuildData <- subset(countedBuildData, freq <= trimThreshold)
+  listOfQualifiedProjects <- shavedCountedBuildData$x
+  return(subset(data, data[[fieldToCount]] %in% listOfQualifiedProjects))
+}
+
+maxPluginCount <- function(data) {
+  countedData <- count(data$plugin)
+  return(max(countedData$freq))
+  
+}
+
 perDayTextOutput <- function(timeInput) {
   return(sprintf(
     "This is a chart displaying the number of project builds per day from: %s to %s", timeInput[1], timeInput[2]))

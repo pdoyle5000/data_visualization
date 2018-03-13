@@ -46,6 +46,11 @@ shinyUI(
                                                   "Idexx" = "com.idexx",
                                                   "Gradle" = "org.gradle",
                                                   "Other" = "other")),
+                          sliderInput(inputId = "buildCount",
+                                      label = "Max Build Count",
+                                      min = 0,
+                                      max = pluginCount,
+                                      value = pluginCount),
                           textOutput("pluginText")),
                    height = 800,
                    width = '98%'))
